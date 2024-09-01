@@ -1,0 +1,91 @@
+class Node {
+    int data;
+    Node next;
+
+    public Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class CircularQueue {
+    private Node front, rear;
+
+    public CircularQueue() {
+        this.front = this.rear = null;
+    }
+
+    // Function to enqueue an element
+    public void enQueue(int value) {
+        Node newNode = new Node(value);
+
+        // If the queue is empty
+        if (this.front == null) {
+            this.front = this.rear = newNode;
+            this.rear.next = this.front; // Circular link
+        } else {
+            this.rear.next = newNode;
+            this.rear = newNode;
+            this.rear.next = this.front; // Circular link
+        }
+    }
+
+    // Function to dequeue an element
+    public int deQueue() {
+        // If the queue is empty
+        if (this.front == null) {
+            System.out.println("Queue is empty");
+            return -1;
+        }
+
+        int value;
+
+        // If there's only one element in the queue
+        if (this.front == this.rear) {
+            value = this.front.data;
+            this.front = this.rear = null;
+        } else {
+            Node temp = this.front;
+            value = temp.data;
+            this.front = this.front.next;
+            this.rear.next = this.front; // Update rear.next to front
+        }
+
+        return value;
+    }
+
+    // Function to get the front item
+    public int Front() {
+        if (this.front == null) {
+            System.out.println("Queue is empty");
+            return -1;
+        }
+        return this.front.data;
+    }
+
+    // Function to get the rear item
+    public int Rear() {
+        if (this.rear == null) {
+            System.out.println("Queue is empty");
+            return -1;
+        }
+        return this.rear.data;
+    }
+
+    public static void main(String[] args) {
+        CircularQueue queue = new CircularQueue();
+
+        queue.enQueue(10);
+        queue.enQueue(20);
+        queue.enQueue(30);
+        queue.enQueue(40);
+
+        System.out.println("Front item is " + queue.Front()); // Output: 10
+        System.out.println("Rear item is " + queue.Rear());   // Output: 40
+
+        System.out.println("Dequeued item is " + queue.deQueue()); // Output: 10
+
+        System.out.println("Front item is " + queue.Front()); // Output: 20
+        System.out.println("Rear item is " + queue.Rear());   // Output: 40
+    }
+}
